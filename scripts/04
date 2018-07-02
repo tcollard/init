@@ -1,0 +1,13 @@
+#!/bin/sh
+if [ ! -f /home/vagrant/documents/scripts/crontab.checksum ]
+then
+	touch /home/vagrant/documents/scripts/crontab.checksum
+	chmod 666 crontab.checksum
+	md5sum /etc/crontab > crontab.checksum
+fi
+if (! md5sum -c crontab.checksum >/dev/null 2>&1)
+then
+	md5sum /etc/crontab > crontab.checksum
+	echo "Warning Crontab was modified" | mail -s
+	"!WARNING!" root
+fi
